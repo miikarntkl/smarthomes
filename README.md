@@ -1,0 +1,1 @@
+Demonstrative application for controlling SmartHomes. 
