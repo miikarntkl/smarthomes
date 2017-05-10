@@ -1,18 +1,9 @@
 package com.smarthomes.smarthomes;
 
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.PixelFormat;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,15 +13,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
+import layout.LightingFragment;
+import layout.ProfilesFragment;
+import layout.ReportFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ColorDrawable LIGHTING_PRIMARY = null;
+    private ColorDrawable LIGHTING_DARK = null;
+    private ColorDrawable LIGHTING_ACCENT = null;
+
+    private ColorDrawable REPORT_PRIMARY = null;
+    private ColorDrawable REPORT_DARK = null;
+    private ColorDrawable REPORT_ACCENT = null;
+
+    private ColorDrawable PROFILES_PRIMARY = null;
+    private ColorDrawable PROFILES_DARK = null;
+    private ColorDrawable PROFILES_ACCENT = null;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setColors();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -71,18 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    appBarLayout.setBackground(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null)));
-                    System.out.println("Pos 0 " + position);
-                }
-                if (position == 1) {
-                    appBarLayout.setBackground(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null)));
-                    System.out.println("Pos 1 " + position);
-                }
-                if (position == 2) {
-                    appBarLayout.setBackground(new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null)));
-                    System.out.println("Pos 2 " + position);
-                }
+                setPageColors(position, mViewPager, appBarLayout);
             }
 
             @Override
@@ -92,7 +86,37 @@ public class MainActivity extends AppCompatActivity {
         });
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setCurrentItem(1);
 
+    }
+
+    private void setPageColors(int position, ViewPager mViewPager, AppBarLayout appBarLayout) {
+        if (position == 0) { //Lighting
+            appBarLayout.setBackground(LIGHTING_DARK);
+            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+        }
+        if (position == 1) { //Report
+            appBarLayout.setBackground(REPORT_PRIMARY);
+            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+        }
+        if (position == 2) { //Profiles
+            appBarLayout.setBackground(PROFILES_PRIMARY);
+            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+        }
+    }
+
+    private void setColors() {
+        LIGHTING_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.lightingPrimary, null));
+        LIGHTING_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.lightingDark, null));
+        LIGHTING_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.lightingAccent, null));
+
+        REPORT_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+        REPORT_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+        REPORT_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+
+        PROFILES_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        PROFILES_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        PROFILES_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
     }
 
     private void showSystemUI() {
@@ -125,32 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
+/*
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 return rootView;
             }
         }
-    }
+    }*/
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -183,9 +182,19 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    LightingFragment lighting = new LightingFragment();
+                    return lighting;
+                case 1:
+                    ReportFragment report = new ReportFragment();
+                    return report;
+                case 2:
+                    ProfilesFragment profiles = new ProfilesFragment();
+                    return profiles;
+            }
+
+            return null;
         }
 
         @Override
@@ -198,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Report";
-                case 1:
                     return "Lighting";
+                case 1:
+                    return "Report";
                 case 2:
                     return "Profiles";
             }

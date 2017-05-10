@@ -10,20 +10,22 @@ import android.view.ViewGroup;
 
 import com.smarthomes.smarthomes.R;
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LightingFragment.OnFragmentInteractionListener} interface
+ * {@link ProfilesFragment } interface
  * to handle interaction events.
- * Use the {@link LightingFragment newInstance} factory method to
+ * Use the {@link ProfilesFragment newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LightingFragment extends Fragment {
+public class ProfilesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lighting, container, false);
+        return inflater.inflate(R.layout.fragment_profiles, container, false);
     }
+
 }
