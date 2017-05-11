@@ -41,10 +41,19 @@ import java.util.Random;
  */
 public class ReportFragment extends Fragment {
 
+    private boolean startHighlightDone = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("Creating charts!");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_report, container, false);
     }
 
     private void setChartData(BarChart chart) {
@@ -52,25 +61,27 @@ public class ReportFragment extends Fragment {
         Random random = new Random();
         int startVal = 50;
         for (int x = 0; x < 5; x++) {
-            int val = startVal - random.nextInt(8);
-            System.out.println("entry value: " + val);
+            int val = startVal - random.nextInt(6) + random.nextInt(4);
             xData.add(new BarEntry(x, val));
-            startVal -= 3;
+            startVal -= 2;
         }
-        BarDataSet dataSet = new BarDataSet(xData, "€ / kuukaudessa");
+        BarDataSet dataSet = new BarDataSet(xData, "€ per month");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         List<String> labels = new ArrayList<>();
-        labels.add("MA");
-        labels.add("TI");
-        labels.add("KE");
-        labels.add("TO");
-        labels.add("PE");
+        labels.add("MON");
+        labels.add("TUE");
+        labels.add("WED");
+        labels.add("THU");
+        labels.add("FRI");
 
         chart.setDrawValueAboveBar(false);
+        chart.getXAxis().setDrawLabels(false);
+        chart.setPinchZoom(false);
+        chart.setDoubleTapToZoomEnabled(false);
 
         BarData data = new BarData(dataSet);
         chart.setData(data);
-        chart.getXAxis().setAxisMaximum(5.5f);
+        chart.getXAxis().setAxisMaximum(4.5f);
         chart.getXAxis().setAxisMinimum(-0.5f);
         chart.getXAxis().setLabelCount(5,  true);
 
@@ -87,13 +98,10 @@ public class ReportFragment extends Fragment {
             }
         });
 
-        for (String l : labels) {
-            System.out.println(l);
-        }
-
         Description desc = new Description();
         chart.setDescription(null);
         chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        //chart.getXAxis().setDrawLabels(false);
         chart.invalidate();
 
         System.out.println("chart set");
@@ -103,28 +111,27 @@ public class ReportFragment extends Fragment {
         int x = Math.round(e.getX());
 
         TextView dayText = (TextView) getView().findViewById(R.id.dayText);
-        String[] days = {"MA", "TI", "KE", "TO", "PE"};
+        String[] days = {"MON", "TUE", "WED", "THU", "FRI"};
 
         TextView usageText = (TextView) getView().findViewById(R.id.usageText);
         TextView costText = (TextView) getView().findViewById(R.id.costText);
 
-        if (x > -1 && x < 5) {
-            dayText.setText(days[x]);
-            int value = Math.round(e.getY());
-            costText.setText(String.valueOf(value));
-            usageText.setText(String.valueOf(Math.round(value * 4.6f)));
-        } else if (x == 5){
-            int value = Math.round(e.getY());
-            costText.setText(String.valueOf(value));
-            usageText.setText(String.valueOf(Math.round(value * 4.6f)));
-        }
-    }
+        Random random = new Random();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false);
+        float multiplier = 4.6f;
+        int value = Math.round(e.getY());
+        int usage = Math.round(value * (4.6f));
+
+        if (value == 0 && usage == 0) {
+            dayText.setText("-");
+        } else if (x > -1 && x < 5) {
+            dayText.setText(days[x]);
+            costText.setText(String.valueOf(value));
+            usageText.setText(String.valueOf(usage));
+        } else if (x == 5){
+            costText.setText(String.valueOf(value));
+            usageText.setText(String.valueOf(usage));
+        }
     }
 
     @Override
@@ -132,5 +139,8 @@ public class ReportFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         BarChart chart = (BarChart) getView().findViewById(R.id.chart);
         setChartData(chart);
+        if (!startHighlightDone) {
+            chart.highlightValue(4, 0);
+        }
     }
 }

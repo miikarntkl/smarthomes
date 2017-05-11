@@ -4,7 +4,17 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="lightingMain">#ffcc80</color>
-    <color name="lightingPrimary">#ffca7d</color>
+    <color name="lightingPrimary">#fff3e0</color>
     <color name="lightingDark">#ffb74c</color>
     <color name="lightingAccent">#ff8800</color>
+    <color name="reportPrimary">#fafbff</color>
+    <color name="reportDark">#9fa8da</color>
+    <color name="reportAccent">#83616161</color>
+    <color name="projectWhite">#ffffff</color>
+    <color name="profilesPrimary">#f2f2f2</color>
+    <color name="profilesDark">#d2d2d2</color>
+    <color name="profilesAccent">#a9a9a9</color>
+    <color name="safetyPrimary">#fffbfb</color>
+    <color name="safetyDark">#ff8a80</color>
+    <color name="safetyAccent">#ff5252</color>
 </resources>

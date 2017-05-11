@@ -20,6 +20,7 @@ import android.view.View;
 import layout.LightingFragment;
 import layout.ProfilesFragment;
 import layout.ReportFragment;
+import layout.SafetyFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private ColorDrawable PROFILES_PRIMARY = null;
     private ColorDrawable PROFILES_DARK = null;
     private ColorDrawable PROFILES_ACCENT = null;
+
+    private ColorDrawable SAFETY_PRIMARY = null;
+    private ColorDrawable SAFETY_DARK = null;
+    private ColorDrawable SAFETY_ACCENT = null;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -64,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -93,15 +97,19 @@ public class MainActivity extends AppCompatActivity {
     private void setPageColors(int position, ViewPager mViewPager, AppBarLayout appBarLayout) {
         if (position == 0) { //Lighting
             appBarLayout.setBackground(LIGHTING_DARK);
-            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+            mViewPager.setBackground(LIGHTING_PRIMARY);
         }
         if (position == 1) { //Report
-            appBarLayout.setBackground(REPORT_PRIMARY);
-            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+            appBarLayout.setBackground(REPORT_DARK);
+            mViewPager.setBackground(REPORT_PRIMARY);
         }
-        if (position == 2) { //Profiles
-            appBarLayout.setBackground(PROFILES_PRIMARY);
-            mViewPager.setBackground(new ColorDrawable(Color.WHITE));
+        if (position == 2) { //Safety
+            appBarLayout.setBackground(SAFETY_DARK);
+            mViewPager.setBackground(SAFETY_PRIMARY);
+        }
+        if (position == 3) { //Profiles
+            appBarLayout.setBackground(PROFILES_DARK);
+            mViewPager.setBackground(PROFILES_PRIMARY);
         }
     }
 
@@ -110,13 +118,17 @@ public class MainActivity extends AppCompatActivity {
         LIGHTING_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.lightingDark, null));
         LIGHTING_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.lightingAccent, null));
 
-        REPORT_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
-        REPORT_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
-        REPORT_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+        REPORT_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.reportPrimary, null));
+        REPORT_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.reportDark, null));
+        REPORT_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.reportAccent, null));
 
-        PROFILES_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
-        PROFILES_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
-        PROFILES_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        PROFILES_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.profilesPrimary, null));
+        PROFILES_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.profilesDark, null));
+        PROFILES_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.profilesAccent, null));
+
+        SAFETY_PRIMARY = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.safetyPrimary, null));
+        SAFETY_DARK = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.safetyDark, null));
+        SAFETY_ACCENT = new ColorDrawable(ResourcesCompat.getColor(getResources(), R.color.safetyAccent, null));
     }
 
     private void showSystemUI() {
@@ -149,32 +161,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
-                View rootview = inflater.inflate(R.layout.fragment_report, container, false);
-                return rootview;
-            }
-            if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
-                View rootview = inflater.inflate(R.layout.fragment_lighting, container, false);
-                return rootview;
-            }
-            else {
-                View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-                TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
-            }
-        }
-    }*/
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private final int page_count = 4;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -190,6 +184,9 @@ public class MainActivity extends AppCompatActivity {
                     ReportFragment report = new ReportFragment();
                     return report;
                 case 2:
+                    SafetyFragment safety = new SafetyFragment();
+                    return safety;
+                case 3:
                     ProfilesFragment profiles = new ProfilesFragment();
                     return profiles;
             }
@@ -199,8 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return page_count;
         }
 
         @Override
@@ -211,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "Report";
                 case 2:
+                    return "Safety";
+                case 3:
                     return "Profiles";
             }
             return null;
